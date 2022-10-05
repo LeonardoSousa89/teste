@@ -1,0 +1,15 @@
+it('(I) Should it testing UI', ()=>{
+  let testing_UI_Id=fixture.debugElement.nativeElement.querySelector('#id')
+  let testing_UI_Class=fixture.debugElement.nativeElement.querySelector('.class')
+
+  expect(UI).toBe('argument')
+})
+
+
+ng test 
+
+ng test --code-coverage
+
+
+#remove espaços em branco
+element.trim()
