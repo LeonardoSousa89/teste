@@ -14,7 +14,7 @@ let response=async()=>{
 
     //GET ALL
 
-    await axios.default.get('http://localhost:8766/loja/itens?page=0&size=5')
+    await axios.default.get('http://127.0.0.1:8766/loja/itens?page=0&size=5')
                .then(res=>{
 
                 if(res.status === 200){
