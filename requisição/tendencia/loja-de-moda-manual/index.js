@@ -14,11 +14,11 @@ let response=async()=>{
 
     //GET ALL
 
-    await axios.default.get('http://127.0.0.1:8766/loja/itens?page=0&size=5')
+    await axios.default.get('http://127.0.0.1:8766/loja/itens?page=1&size=2')
                .then(res=>{
 
                 if(res.status === 200){
-                    console.log(res.data    )
+                    console.log(res.data)
                 }
                     
             })
@@ -138,7 +138,7 @@ let response=async()=>{
 
 
 
-app.listen(3000, ()=>{
+app.listen(4200, ()=>{
 
     console.log(response())
 

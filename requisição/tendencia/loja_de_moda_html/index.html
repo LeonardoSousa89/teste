@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *{
+            margin: auto;
+        }
+        body{
+            height: 100vh;
+            width: 100vh;
+        }
+        .buscar{
+            /* border:solid 0.5px red; */
+            width: 60%;
+            height: 15%;
+            padding: 1vh;
+        }
+        #busca{
+            outline: none;
+            border:solid 0.5px rgba(0,0,0,0.2);
+            width: 90%;
+            padding: 2vh;
+            font-size: larger;
+        }
+        .container{
+            /* border:solid 0.5px red; */
+            width: 60%;
+            height: 70%;
+        }
+        .container input{
+            padding: 2vh;
+            outline: none;
+            border:solid 0.5px rgba(0,0,0,0.2);
+            width: 90%;
+        }
+        button{
+            outline: none;
+            border:none;
+            background: rgba(0,0,0,0.2);
+            padding: 1vh;
+            cursor: pointer;
+            width: 95%;
+
+            transition-property: all;
+            transition-duration: 0.5s;
+        }
+        button:hover{
+            background: rgba(0,0,0,0.5);
+        }
+        body, .buscar, .container{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <div class="buscar">
+        <input id="busca" type="text"   placeholder="EX: vestido, camisa...">
+        <button id="busca_geral">consulta</button>
+    </div>
+    
+    <div class="container">
+        
+        <input id="preco" type="number" placeholder="preco">
+        <input id="peca" type="text"   placeholder="peca">
+        <input id="categoria" type="text"   placeholder="categoria">
+        <input id="descricao" type="text"   placeholder="descricao">
+        <input id="tamanho" type="text"   placeholder="tamanho">
+        <input id="cor" type="text"   placeholder="cor">
+        <input id="image_url" type="text"   placeholder="imagem">
+
+        <button id="enviar">enviar</button>
+    </div>
+
+    <script>
+        const doc=document
+        const url='http://localhost:8766'
+
+        const enviar=doc.getElementById("enviar")
+        const busca_peca=doc.getElementById("busca")
+        const busca_geral=doc.getElementById("busca_geral")
+
+        let requisicao={
+
+            preco: doc.getElementById("preco"),
+            peca: doc.getElementById("peca"),
+            categoria: doc.getElementById("categoria"),
+            descricao: doc.getElementById("descricao"),
+            tamanho: doc.getElementById("tamanho"),
+            cor: doc.getElementById("cor"),
+            image_url: doc.getElementById("image_url")
+        }
+
+
+        enviar.addEventListener('click',function(){
+            
+            const { preco, peca, categoria, descricao, tamanho, cor, image_url }=requisicao
+            
+            const data={ preco: preco.value, 
+                         peca: peca.value.toLowerCase().trim(),
+                         categoria: categoria.value.toLowerCase().trim(),
+                         descricao: descricao.value.toLowerCase().trim(),
+                         tamanho: tamanho.value.toLowerCase().trim(),
+                         cor: cor.value.toLowerCase().trim(),
+                         image_url: image_url.value
+                     }
+        
+            // console.log(data)
+        
+           fetch(`${url}/loja/inserir-item`, 
+            {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers:{ "Content-Type": "application/json" }
+
+            }).then(res=>{
+                
+                console.log(res.json())
+                limparCamposSalvar()
+            })
+              .catch(err=>console.log(err))
+
+        })
+
+        busca_geral.addEventListener('click', function(){
+
+            fetch(`${url}/loja/item/barra-de-busca/peca/busca?peca=${busca_peca.value}&page=0`, 
+                { method: 'GET' })
+                                .then(res=>{
+
+                                    console.log(res.json())
+                                    limparCamposBusca()
+                                })
+                                .catch(err=>console.log(err))
+
+        })
+
+        function limparCamposSalvar(){
+            
+            requisicao.tamanho.value=''
+            requisicao.categoria.value=''
+            requisicao.cor.value=''
+            requisicao.descricao.value=''
+            requisicao.image_url.value=''
+            requisicao.peca.value=''
+            requisicao.tamanho.value=''
+            requisicao.preco.value=''
+        }
+
+        function limparCamposBusca(){
+            
+            busca_peca.value=''
+        }
+    </script>
+</body>
+</html>
